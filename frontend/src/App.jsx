@@ -1,5 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 const App = () => {
   const [category, setCategory] = useState("");
@@ -17,35 +33,56 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Random Meal Generator</h1>
-      <div>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="">Select Category</option>
-          <option value="Seafood">Seafood</option>
-          <option value="Vegan">Vegan</option>
-          <option value="Vegetarian">Vegetarian</option>
-          <option value="Dessert">Dessert</option>
-          <option value="Beef">Beef</option>
-          <option value="Chicken">Chicken</option>
-          <option value="Pasta">Pasta</option>
-          <option value="Pork">Pork</option>
-        </select>
-        <button onClick={handleGenerateMeal}>Generate</button>
+    <div className="flex flex-col items-center p-4">
+      <div className="text-2xl font-bold mb-4">
+        <h1>Meal Roulette</h1>
       </div>
+
+      <div className="w-full max-w-md">
+        <Select value={category} onValueChange={(value) => setCategory(value)}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="Seafood">Seafood</SelectItem>
+              <SelectItem value="Vegan">Vegan</SelectItem>
+              <SelectItem value="Vegetarian">Vegetarian</SelectItem>
+              <SelectItem value="Dessert">Dessert</SelectItem>
+              <SelectItem value="Beef">Beef</SelectItem>
+              <SelectItem value="Chicken">Chicken</SelectItem>
+              <SelectItem value="Pasta">Pasta</SelectItem>
+              <SelectItem value="Pork">Pork</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        <Button className="w-full mt-2 mb-4" onClick={handleGenerateMeal}>
+          Generate Random Meal
+        </Button>
+      </div>
+
       {meal && (
-        <div>
-          <h2>{meal.strMeal}</h2>
-          <img src={meal.strMealThumb} alt={meal.strMeal} width="200" />
-          <ul>
-            {Object.keys(meal)
-              .filter((key) => key.startsWith("strIngredient") && meal[key])
-              .map((key, index) => (
-                <li key={index}>{meal[key]}</li>
-              ))}
-          </ul>
-          <p>Fun Fact: This meal is a popular dish in {meal.strArea}.</p>
-        </div>
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>{meal.strMeal}</CardTitle>
+            <CardDescription>Popular dish in {meal.strArea}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <img
+              src={meal.strMealThumb}
+              alt={meal.strMeal}
+              className="w-full rounded-lg mb-4"
+            />
+            <ul className="list-disc list-inside">
+              {Object.keys(meal)
+                .filter((key) => key.startsWith("strIngredient") && meal[key])
+                .map((key, index) => (
+                  <li key={index}>{meal[key]}</li>
+                ))}
+            </ul>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
